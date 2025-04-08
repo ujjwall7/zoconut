@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Client Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <style>
+
+    
+    .success-toast{
+        background: #04aa6d;
+        display: block;
+        width: max-content;
+        color: #fff;
+        border-radius: 3px;
+        border: none;
+        font-size: 16px;
+        padding: 15px 20px;
+        position: fixed;
+        top: 0;
+        left: 99%;
+        transform: translate(-100%,0%);
+        box-shadow: #ffffff99 0px 0px 17px 0px;
+        z-index: 100000;
+        }
+    
+        .error-toast {
+            background: #ef0606;
+            display: block;
+            width: max-content;
+            color: #fff;
+            border-radius: 3px;
+            border: none;
+            font-size: 16px;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 99%;
+            transform: translate(-100%, 0%);
+            box-shadow: #ffffff99 0px 0px 17px 0px;
+            z-index: 100000;
+        }
+
+        
+
+    body {
+      background-color: #f3e8e8;
+      color: white;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: #94ace4;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .table-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .table thead {
+      background-color: #94ace4;
+      color: white;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f5f7fa;
+      color: #000;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+      background-color: #e9eff6;
+      color: #000;
+    }
+
+    .pagination {
+        justify-content: flex-start;
+    }
+  </style>
+
+
+</head>
+<body>
+
+  <div class="container">
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card p-3 text-center">
+          <h6>New Clients Added in the Last 2 Months</h6>
+          <h2 id="newClientsCount">0</h2>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3 text-center">
+          <h6>New Appointments in the Last 2 Months</h6>
+          <h2 id="newAppointmentsCount">0</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Button -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="text-dark">Clients List</h5>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClientModal">Add Client</button>
+    </div>
+    
+    
+<!-- Modal -->
+<div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="addClientForm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addClientModalLabel">Add New Client</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="clientName" class="form-label" style="color: black; font-weight: bold;">Username*</label>
+              <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+              <label for="clientName" class="form-label" style="color: black; font-weight: bold;">Name*</label>
+              <input type="text" class="form-control" id="clientName" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="clientPhone" class="form-label" style="color: black; font-weight: bold;">Phone*</label>
+              <input type="text" class="form-control" id="clientPhone" name="phone" required>
+            </div>
+            <div class="mb-3">
+              <label for="clientCountryCode" class="form-label" style="color: black; font-weight: bold;">Country Code*</label>
+              <input type="text" class="form-control" id="clientCountryCode" name="country_code" value="+91">
+            </div>
+            <input type="hidden" name="role" value="client">
+          </div>
+  
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Save Client</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <!-- Table Card -->
+    <div class="table-card">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Phone Number</th>
+                    <th>Appointment Date and Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+    
+            <tbody id="clientsTableBody">
+                <!-- Data yahan dynamically aayega -->
+            </tbody>
+        </table>
+    
+        <!-- Pagination (static for now) -->
+        <ul class="pagination">
+                <ul class="pagination justify-content-center" id="pagination">
+            <!-- JS se populate hoga -->
+        </ul>
+    </div>
+    
+    </div>
+</div>
+
+<div class="text-start" style="text-align: start;">
+    <div id="contact_id"></div>
+</div>
+
+<!-- jQuery CDN -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+    function loadClients(page = 1) {
+        $.ajax({
+            url: `/dashboard/api/?page=${page}`,
+            method: "GET",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            success: function (response) {
+                console.log(response)
+                let data = response.clients_data;
+                let currentPage = response.page;
+                let totalPages = response.total_pages;
+
+                let tableBody = $("#clientsTableBody");
+                tableBody.empty();
+
+                if (data.length > 0) {
+                    data.forEach(item => {
+                        tableBody.append(`
+                            <tr>
+                                <td>${item.client.name}</td>
+                                <td>${item.client.primary_number}</td>
+                                <td>${item.appointment_datetime}</td>
+                                <td>${item.status}</td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    tableBody.append(`<tr><td colspan="3">No data found!</td></tr>`);
+                }
+
+                $("#newClientsCount").text(response.new_clients);
+                $("#newAppointmentsCount").text(response.new_appointments);
+
+                // Pagination
+                let pagination = $("#pagination");
+                pagination.empty();
+
+                if (totalPages > 1) {
+                    pagination.append(`
+                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="#" onclick="loadClients(${currentPage - 1})">Previous</a>
+                        </li>
+                    `);
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        pagination.append(`
+                            <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="loadClients(${i})">${i}</a>
+                            </li>
+                        `);
+                    }
+
+                    pagination.append(`
+                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                            <a class="page-link" href="#" onclick="loadClients(${currentPage + 1})">Next</a>
+                        </li>
+                    `);
+                }
+            },
+            error: function () {
+                alert("AJAX error while loading paginated data.");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        loadClients();
+    });
+</script>
+
+<script>
+    function showToast(message, colorClass, toaster_id) {
+        let toast_id = document.getElementById(toaster_id);
+        toast_id.innerHTML = '';
+
+        const toastDiv = document.createElement("div");
+        toastDiv.innerHTML = message;
+        toastDiv.classList.add(colorClass);
+
+        toast_id.appendChild(toastDiv);
+        setTimeout(function () {
+            toastDiv.remove();
+        }, 3000);
+    }
+
+    $(document).on('submit', '#addClientForm', function (e) {
+        e.preventDefault();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'add_client_api' %}",
+            data: $(this).serialize(),
+            success: function (response) {
+                showToast(response.message, response.color_class, 'contact_id');
+                if (response.color_class === 'success-toast') {
+                    $('#clientName').val('');
+                    $('#clientPhone').val('');
+                    $('#username').val('');
+
+                    // Modal close karo
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addClientModal'));
+                    modal.hide();
+
+                    // Table reload karo
+                    loadClients(1);  // default page 1
+
+                }
+            },
+            error: function () {
+                showToast('Something went wrong! Please try again.', 'error-toast', 'contact_id');
+            }
+        });
+    });
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) == 0)
+                return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+</script>
+
+
+</body>
+</html>
