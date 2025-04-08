@@ -19,7 +19,7 @@ def SignIn(request):
                 password = form.cleaned_data['password']
                 user = authenticate(username=email, password=password)
                 login(request, user)
-                messages.success(request, "Login succesfully!")
+                # messages.success(request, "Login succesfully!")
                 return redirect('dashboard')
             else:
                 print(f"{form.errors = }")
@@ -34,9 +34,13 @@ def SignIn(request):
         return redirect('dashboard')
 
 def dashboard_view(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')
     return render(request, 'dashboard.html')
 
 def dashboardAPI(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')
     if request.method == 'GET':
         appointment = ClientAppointment.objects.filter(account_holder__id=request.user.id)
         paginator = Paginator(appointment, 1)  # 5 clients per page
@@ -69,6 +73,8 @@ def dashboardAPI(request):
         return JsonResponse(context)
 
 def ClientAddAPI(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')
     try:
         user = User()
         user.username = request.POST.get('username')
@@ -78,3 +84,12 @@ def ClientAddAPI(request):
         return JsonResponse({'success': True, 'message': 'Your Client Created Successfuly', 'color_class' : 'success-toast'})
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error : {e}', 'color_class' : 'error-toast'})
+
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')
+    logout(request)
+    return redirect('signin')

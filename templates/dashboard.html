@@ -110,6 +110,9 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="text-dark">Clients List</h5>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClientModal">Add Client</button>
+      <a href="{% url 'logout' %}">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClientModal">Logout</button>
+      </a>
     </div>
     
     
@@ -213,7 +216,7 @@
                         `);
                     });
                 } else {
-                    tableBody.append(`<tr><td colspan="3">No data found!</td></tr>`);
+                    tableBody.append(`<tr><td colspan="4"><center>No data found!</center></td></tr>`);
                 }
 
                 $("#newClientsCount").text(response.new_clients);
