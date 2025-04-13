@@ -32,3 +32,5 @@ class ClientAppointment(models.Model):
     def __str__(self):
         return f"{self.client.name} - {self.status} - {self.appointment_datetime.strftime('%Y-%m-%d %H:%M')}"
     
+
+# abcooo
